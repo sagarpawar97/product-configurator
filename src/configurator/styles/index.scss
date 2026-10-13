@@ -1,0 +1,40 @@
+// ─────────────────────────────────────────────────────────────
+//  STYLE ENTRY — the only stylesheet the web component loads.
+//
+//  Isolation, two layers:
+//   1. The component renders inside Shadow DOM, so host-page CSS can't style
+//      it and this CSS can't reach the host page.
+//   2. Every rule is nested under the parent class `.wsc-configurator`,
+//      so even if this CSS were loaded on a normal page it only matches
+//      inside the component.
+//
+//  To change fonts / colors / global font size → edit _variables.scss.
+// ─────────────────────────────────────────────────────────────
+@use 'sass:meta';
+@use 'variables' as *;
+
+// Shadow host: stop inherited styles (font, color, line-height, letter-spacing…)
+// from the host page leaking in.
+:host {
+  all: initial;
+  display: contents; // takes no space on the host page; the modal is position: fixed
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.wsc-configurator {
+  font-family: $font-family-base;
+  font-size: $font-size-md;
+  line-height: 1.5;
+  color: $color-text;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+
+  @include meta.load-css('base');
+  @include meta.load-css('components/configurator-modal');
+  @include meta.load-css('components/segment-row');
+  @include meta.load-css('components/summary-panel');
+  @include meta.load-css('components/order-string');
+}

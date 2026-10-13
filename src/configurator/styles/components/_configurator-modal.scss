@@ -1,0 +1,413 @@
+@use '../variables' as *;
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  display: grid;
+  place-items: center;
+  padding: $space-5;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: $color-overlay;
+    backdrop-filter: blur(3px);
+  }
+
+  &__panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(#{$modal-max-width}, 100%);
+    max-height: calc(100vh - #{$space-6} * 2);
+    max-height: calc(100dvh - #{$space-6} * 2); // dynamic viewport: mobile browser bars
+    background: $color-bg-surface;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-modal;
+    overflow: hidden;
+    outline: none;
+    animation: wsc-modal-in 180ms ease-out;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: $space-4;
+    padding: $space-5 $space-6 $space-4;
+
+    > div {
+      min-width: 0;
+    }
+
+    h2 {
+      overflow-wrap: anywhere;
+      font-size: $font-size-xxl;
+      font-weight: $font-weight-bold;
+    }
+    p {
+      margin: $space-2 0 0;
+      font-size: $font-size-lg;
+      color: $color-text-muted;
+    }
+  }
+
+  &__close {
+    flex: none;
+    width: (2.5 * $font-size-root);
+    height: (2.5 * $font-size-root);
+    margin: (-0.5 * $font-size-root) (-0.5 * $font-size-root) 0 0;
+    border-radius: 50%;
+    border: 0;
+    background: none;
+    font-size: (2 * $font-size-root);
+    line-height: 1;
+    color: $color-text;
+    cursor: pointer;
+  }
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax((19 * $font-size-root), 1fr);
+    gap: $space-4;
+    padding: 0 $space-5 $space-1;
+  }
+
+  // Wrapper so the loader sits above the scrolling list without being part of it
+  &__main-wrap {
+    position: relative;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    background: $color-bg-surface;
+    overflow: hidden;
+  }
+
+  &__main {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden; // never scroll sideways
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  // Thin indeterminate progress bar — absolutely positioned, so it never shifts the layout
+  &__progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    height: 3px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 35%;
+      border-radius: 2px;
+      background: $color-primary;
+      animation: wsc-progress 1s ease-in-out infinite;
+    }
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+
+  // Required / Optional sections
+  &__section + &__section {
+    border-top: 1px solid $color-border;
+  }
+
+  &__section-title {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+    margin: 0;
+    padding: $space-2 $space-4;
+    background: $color-bg-subtle;
+    border-bottom: 1px solid $color-border;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-primary;
+  }
+
+  &__count {
+    padding: 1px $space-2;
+    border-radius: 999px;
+    background: $color-bg-surface;
+    border: 1px solid $color-border;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    letter-spacing: normal;
+    text-transform: none;
+    color: $color-text-muted;
+
+    &.is-done {
+      border-color: rgba($color-success, 0.3);
+      background: $color-success-soft;
+      color: $color-success;
+    }
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__empty {
+    padding: $space-5;
+    color: $color-text-muted;
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-6 $space-5;
+    color: $color-text-muted;
+  }
+
+  &__alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+    margin: $space-3;
+    padding: $space-3 $space-4;
+    background: $color-danger-soft;
+    border-left: 3px solid $color-danger;
+    color: $color-danger;
+    font-size: $font-size-sm;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-4 $space-5;
+    border-top: 1px solid $color-border;
+  }
+
+  &__cancel {
+    min-width: (7.5 * $font-size-root);
+  }
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    text-align: right;
+
+    span {
+      font-size: $font-size-xs;
+      color: $color-text-muted;
+    }
+    strong {
+      font-size: $font-size-xl;
+      color: $color-heading;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-3;
+    margin-left: auto;
+
+    .btn--outline {
+      min-width: (9 * $font-size-root);
+    }
+    .btn--primary {
+      min-width: (10.5 * $font-size-root);
+    }
+  }
+
+  &__total + &__actions {
+    margin-left: 0;
+  }
+
+  // ── Tablet ──
+  // Stack form + summary and scroll the body as one column
+  @include tablet-down {
+    &__body {
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    &__main-wrap,
+    &__main,
+    .summary {
+      flex: none;
+      min-height: auto;
+      overflow: visible;
+    }
+  }
+
+  // ── Mobile: bottom sheet ──
+  @include mobile {
+    padding: 0;
+    place-items: end stretch;
+
+    &__panel {
+      width: 100%;
+      max-height: 94vh;
+      max-height: 94dvh;
+      animation-name: wsc-sheet-in;
+      border-radius: $radius-lg $radius-lg 0 0;
+
+      &::before {
+        content: '';
+        display: block;
+        width: (3 * $font-size-root);
+        height: 4px;
+        margin: $space-2 auto 0;
+        border-radius: 2px;
+        background: $color-border-strong;
+      }
+    }
+
+    &__header {
+      padding: $space-3 $space-4;
+      h2 {
+        font-size: $font-size-lg;
+      }
+      p {
+        font-size: $font-size-sm;
+      }
+    }
+
+    &__body {
+      padding: 0 $space-3 $space-3;
+      gap: $space-3;
+    }
+
+    &__main-wrap {
+      border-radius: $radius-md;
+    }
+
+    &__footer {
+      flex-wrap: wrap;
+      gap: $space-2;
+      padding: $space-3;
+      padding-bottom: calc(#{$space-3} + env(safe-area-inset-bottom, 0px)); // iPhone home bar
+    }
+
+    &__total {
+      order: -1;
+      flex-basis: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    &__cancel {
+      min-width: 0;
+      flex: 1;
+      padding: 0 $space-2;
+    }
+
+    &__actions {
+      flex: 3;
+      margin-left: 0;
+      gap: $space-2;
+
+      .btn {
+        min-width: 0;
+        flex: 1;
+        padding: 0 $space-2;
+      }
+      .btn--primary {
+        flex: 1.4;
+      }
+    }
+  }
+
+  // Small phones (e.g. iPhone SE): drop the subtitle to give the options more room
+  @media (max-width: $bp-mobile) and (max-height: 700px) {
+    &__header p {
+      display: none;
+    }
+  }
+
+  // ── Short screens (landscape phones, small laptops): keep room for the options ──
+  @media (max-height: 560px) {
+    padding: $space-2;
+
+    &__panel {
+      max-height: calc(100dvh - #{$space-2} * 2);
+    }
+
+    &__header {
+      padding: $space-2 $space-4;
+
+      h2 {
+        font-size: $font-size-lg;
+      }
+
+      p {
+        display: none;
+      }
+    }
+
+    &__footer {
+      padding: $space-2 $space-4;
+    }
+
+    .btn {
+      min-height: (2.5 * $font-size-root);
+    }
+  }
+}
+
+@keyframes wsc-progress {
+  from {
+    left: -35%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes wsc-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+}
+
+@keyframes wsc-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal__panel,
+  .row__panel,
+  .row__dropdown {
+    animation: none !important;
+  }
+
+  .modal__progress::before {
+    animation-duration: 2.5s !important;
+  }
+}

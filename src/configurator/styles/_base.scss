@@ -1,0 +1,113 @@
+@use 'variables' as *;
+
+// Base styles for the component. This file is loaded INSIDE the parent
+// `.wsc-configurator` selector (see index.scss), so nothing here touches the host page.
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: $color-heading;
+  font-family: inherit;
+  line-height: 1.25;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+}
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+// ── Buttons ──────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  min-height: (3 * $font-size-root);
+  padding: 0 $space-5;
+  border-radius: $radius-md;
+  border: 1.5px solid $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  line-height: 1.2;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  transition: background $transition, color $transition, opacity $transition;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: $color-primary;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: $color-primary-hover;
+    }
+  }
+
+  &--outline {
+    background: $color-bg-surface;
+    color: $color-primary;
+
+    &:hover:not(:disabled) {
+      background: $color-primary-soft;
+    }
+  }
+
+  &--link {
+    border: 0;
+    background: none;
+    color: $color-primary;
+    padding: 0;
+    min-height: auto;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: (1 * $font-size-root);
+  height: (1 * $font-size-root);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: wsc-spin 0.7s linear infinite;
+}
+
+@keyframes wsc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

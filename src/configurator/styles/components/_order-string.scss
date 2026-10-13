@@ -1,0 +1,265 @@
+@use '../variables' as *;
+
+.order {
+  flex: none;
+  margin: $space-4 $space-5 0;
+  background: $color-bg-surface;
+  border: 1px solid $color-border;
+  border-left: 3px solid $color-primary;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-2 $space-2 $space-3;
+  }
+
+  &__toggle {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-1 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  &__chev {
+    flex: none;
+    width: (0.45 * $font-size-root);
+    height: (0.45 * $font-size-root);
+    border-right: 2px solid $color-text-muted;
+    border-bottom: 2px solid $color-text-muted;
+    transform: rotate(-45deg);
+    transition: transform $transition;
+  }
+
+  &--open &__chev {
+    transform: rotate(45deg);
+  }
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__count {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    white-space: nowrap;
+  }
+
+  &__spinner.is-idle {
+    visibility: hidden;
+  }
+
+  &__spinner {
+    width: (0.75 * $font-size-root);
+    height: (0.75 * $font-size-root);
+    color: $color-primary;
+  }
+
+  &__copy {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    min-height: (2 * $font-size-root);
+    padding: 0 $space-3;
+    border: 1px solid $color-primary;
+    border-radius: $radius-sm;
+    background: $color-bg-surface;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: background $transition, color $transition, border-color $transition;
+
+    svg {
+      width: (1 * $font-size-root);
+      height: (1 * $font-size-root);
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    &:hover {
+      background: $color-primary-soft;
+    }
+
+    &.is-ok {
+      background: $color-success-soft;
+      border-color: $color-success;
+      color: $color-success;
+    }
+
+    &.is-fail {
+      background: $color-danger-soft;
+      border-color: $color-danger;
+      color: $color-danger;
+    }
+  }
+
+  &__body {
+    padding: 0 $space-3 $space-3;
+  }
+
+  &__code {
+    display: block;
+    max-height: (7.5 * $font-size-root);
+    overflow-y: auto;
+    padding: $space-2 $space-3;
+    background: $color-bg-subtle;
+    border-radius: $radius-sm;
+    font-family: 'Cascadia Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+    font-size: $font-size-sm;
+    line-height: 1.7;
+    word-break: break-word;
+    user-select: all;
+  }
+
+  &__pair {
+    // keep "50 26D|" together when wrapping
+    white-space: nowrap;
+
+    &.is-default .order__val {
+      color: $color-text-muted;
+      font-weight: $font-weight-regular;
+    }
+
+    &.is-conflict .order__val,
+    &.is-conflict .order__seg {
+      color: $color-danger;
+      text-decoration: underline wavy rgba($color-danger, 0.6);
+      text-underline-offset: 3px;
+    }
+  }
+
+  &__seg {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &__val {
+    color: $color-text;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__sep {
+    margin: 0 1px;
+    color: $color-border-strong;
+  }
+
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+    margin-top: $space-2;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: $space-1;
+    }
+  }
+
+  &__dot {
+    width: (0.5 * $font-size-root);
+    height: (0.5 * $font-size-root);
+    border-radius: 50%;
+    background: $color-text;
+
+    &--default {
+      background: $color-border-strong;
+    }
+
+    &--conflict {
+      background: $color-danger;
+    }
+  }
+
+  // Desktop: below the summary list. Tablet/mobile: docked above the footer.
+  &--panel {
+    margin: 0;
+  }
+
+  &--dock {
+    display: none;
+    margin: 0;
+    border: 0;
+    border-top: 1px solid $color-border;
+    border-radius: 0;
+    box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.06);
+
+    .order__head {
+      padding-inline: $space-5 $space-5;
+    }
+
+    .order__body {
+      padding-inline: $space-5;
+    }
+
+    .order__code {
+      max-height: (4.5 * $font-size-root);
+    }
+  }
+
+  @include tablet-down {
+    &--panel {
+      display: none;
+    }
+
+    &--dock {
+      display: block;
+    }
+  }
+
+  @include mobile {
+    &--dock {
+      .order__head {
+        padding-inline: $space-3;
+      }
+
+      .order__body {
+        padding-inline: $space-3;
+        padding-bottom: $space-2;
+      }
+
+      .order__legend {
+        display: none;
+      }
+    }
+  }
+
+  // Short screens: one scrollable line so the options keep their space
+  @media (max-height: 560px) {
+    &--dock {
+      .order__head {
+        padding-block: $space-1;
+      }
+
+      .order__code {
+        max-height: none;
+        white-space: nowrap;
+        overflow-x: auto;
+        padding-block: $space-1;
+      }
+
+      .order__legend {
+        display: none;
+      }
+    }
+  }
+}

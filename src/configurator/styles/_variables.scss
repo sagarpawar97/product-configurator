@@ -1,0 +1,84 @@
+// ─────────────────────────────────────────────────────────────
+//  GLOBAL STYLE VARIABLES — change fonts, sizes and colors here.
+//  Every size is derived from $font-size-root (compiled to px), so changing
+//  it scales the whole UI — independent of the host page's html font-size.
+// ─────────────────────────────────────────────────────────────
+
+// ── Typography ───────────────────────────────────────────────
+$font-family-base: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-size-root: 16px; // ← global font size: every size scales from this
+
+$font-size-xs: (0.75 * $font-size-root);
+$font-size-sm: (0.8125 * $font-size-root);
+$font-size-md: (0.9375 * $font-size-root);
+$font-size-lg: (1.125 * $font-size-root);
+$font-size-xl: (1.375 * $font-size-root);
+$font-size-xxl: (1.75 * $font-size-root);
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// ── Brand colors ─────────────────────────────────────────────
+$color-primary: #0f6cbd;
+$color-primary-hover: #0c5a9e;
+$color-primary-soft: #e8f2fb;
+$color-heading: #0d1b3e;
+
+// ── Neutrals ─────────────────────────────────────────────────
+$color-text: #1f2937;
+$color-text-muted: #6b7280;
+$color-border: #d6dbe3;
+$color-border-strong: #b8c0cc;
+$color-bg-page: #eef1f6;
+$color-bg-surface: #ffffff;
+$color-bg-subtle: #f4f6fa;
+$color-preview-bg: #e9edf3; // behind the large option image
+$color-overlay: rgba(15, 23, 42, 0.55);
+
+// ── Status ───────────────────────────────────────────────────
+$color-danger: #d13438;
+$color-danger-soft: #fdecec;
+$color-warning: #a16207;
+$color-warning-soft: #fef6e2;
+$color-success: #107c41;
+$color-success-soft: #e6f4ec;
+$color-info: #0f6cbd;
+$color-info-soft: #e8f2fb;
+
+// ── Shape & spacing ──────────────────────────────────────────
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 12px;
+$space-1: (0.25 * $font-size-root);
+$space-2: (0.5 * $font-size-root);
+$space-3: (0.75 * $font-size-root);
+$space-4: (1 * $font-size-root);
+$space-5: (1.5 * $font-size-root);
+$space-6: (2 * $font-size-root);
+
+$modal-max-width: 1400px; // ← configurator width on large screens
+$control-height: (2.625 * $font-size-root);
+$shadow-modal: 0 20px 50px rgba(15, 23, 42, 0.25);
+$shadow-card: 0 1px 3px rgba(15, 23, 42, 0.08);
+$transition: 150ms ease;
+
+// ── Stacking (high so the modal sits above host-page headers/overlays) ──
+$z-modal: 100000;
+$z-dropdown: 100010;
+
+// ── Breakpoints ──────────────────────────────────────────────
+$bp-mobile: 768px;
+$bp-tablet: 1024px;
+
+@mixin mobile {
+  @media (max-width: $bp-mobile) {
+    @content;
+  }
+}
+@mixin tablet-down {
+  @media (max-width: $bp-tablet) {
+    @content;
+  }
+}
